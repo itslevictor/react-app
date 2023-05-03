@@ -14,18 +14,34 @@ jobs:
     
     steps:
       
-      - name: Checkout repository
+      - name: Verifricando repositorio
         uses: actions/checkout@v3
           
-      - name: Set up Node.js 16.x
+      - name: Configurando Node.js 16.x
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
             
-      - name: install dependencies
+      - name: instalando Dependencias
         run: npm install
           
-      - name: Run the tests
+      - name: Rodando testes
         run: npm run test -- --coverage
         env:
           CI: true
+      - name: Scan Sonar Cloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKER: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
+      - name: Buildando a Aplicação
+        run: npm run buid
+        
+      - name: Deploy the application
+        run:
+          ssh google-cloud 'sudo systemctl stop react-app'
+          ssh google-cloud 'sudo rm -rf /app/react-app'
+          scp -r build google-cloud:/home/github/react-app
+          ssh google-cloud 'sudo mv /home/github/react-app /app/react-app'
+          ssh google-cloud 'sudo systemctl start react-app'
