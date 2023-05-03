@@ -23,7 +23,9 @@ jobs:
           node-version: 16.x
             
       - name: instalando Dependencias
-        run: npm install
+        run: |
+              npm cache clean --force
+              npm install 
           
       - name: Rodando testes
         run: npm run test -- --coverage
