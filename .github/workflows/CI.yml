@@ -34,14 +34,3 @@ jobs:
         env:
           GITHUB_TOKER: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
-      - name: Buildando a Aplicação
-        run: npm run buid
-        
-      - name: Deploy the application
-        run:
-          ssh google-cloud 'sudo systemctl stop react-app'
-          ssh google-cloud 'sudo rm -rf /app/react-app'
-          scp -r build google-cloud:/home/github/react-app
-          ssh google-cloud 'sudo mv /home/github/react-app /app/react-app'
-          ssh google-cloud 'sudo systemctl start react-app'
