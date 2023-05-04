@@ -23,7 +23,7 @@ jobs:
           node-version: 16.x
             
       - name: instalando Dependencias
-        run: |
+        run:
               npm cache clean --force
               npm install 
           
@@ -31,6 +31,7 @@ jobs:
         run: npm run test -- --coverage
         env:
           CI: true
+          
       - name: Scan Sonar Cloud
         uses: SonarSource/sonarcloud-github-action@master
         env:
